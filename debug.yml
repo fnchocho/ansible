@@ -1,0 +1,62 @@
+- name: Various ways  to debug in ansible
+  hosts: all
+
+  tasks:
+  - name: Print message 1
+    ansible.builtin.debug:
+      msg: "These runs are configured with super user called fidelis. It always runs because of the tag 'always'."
+    tags:
+    - always
+
+  - name: Print message 2
+    ansible.builtin.debug:
+      msg: "runs when you use tag1"
+    tags:
+    - tag1
+
+  - name: count to 3
+    debug: msg={{ item }}
+    loop: [1, 2, 3]
+
+  - name: Show all the hosts in the inventory
+    ansible.builtin.debug:
+      msg: "{{ item }}"
+    loop: "{{ query('inventory_hostnames', 'all') }}"
+
+  - name: Show all the hosts matching the pattern, ie all but the group www
+    ansible.builtin.debug:
+      msg: "{{ item }}"
+    loop: "{{ query('inventory_hostnames', 'all:!www') }}"
+
+  # - name: Call variables fronm a list
+  #   ansible.builtin.debug:
+  #     msg: "The person is person.name"
+  #   with_dict: "{{ person }}"
+  #   person:
+  #     - name: Fidelis
+  #       age: 29
+  #       city: Fairfield
+  #     - name: Eric
+  #       age: 30
+  #       city: Santa 
+
+
+
+  # - name: Force lookup to return a list using wantlist=true
+  #   ansible.builtin.debug:
+  #     msg: "{{ item }}"
+  #     loop: "{{ lookup('inventory_hostnames', 'all', wantlist=True) }}"
+
+  # - name: Create apache config file
+  #   ansible.builtin.template:
+  #     src: /srv/httpd.j2
+  #     dest: /etc/httpd.conf
+
+  # - name: Ensure latest version of apache is installed
+  #   ansible.builtin.gather_facts: true
+  #   vars:
+  #     pkg_name: not_exit
+      
+    # ansible.builtin.apt:
+    #   name: http
+    #   state: latest
