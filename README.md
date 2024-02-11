@@ -1,4 +1,4 @@
-# ansible_for_devops
+# ansible
 cat ~/.gitconfig
 [user]
         email = fnchocho@gmail.com
